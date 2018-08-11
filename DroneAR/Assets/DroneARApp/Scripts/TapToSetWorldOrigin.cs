@@ -6,16 +6,23 @@ using UnityEngine.XR.ARFoundation;
 public class TapToSetWorldOrigin : MonoBehaviour
 {   
 	public ARSessionOrigin arOrigin;
-
-	public Transform cameraSpaceRotation;
-
-	public Transform cameraOffset;
-
-	public Transform arCamera;
        
+	public ARCameraRig cameraRig;
+    
 	private List<ARRaycastHit> hitResults = new List<ARRaycastHit>();
 
-	private Pose targetCameraPose;
+	new private Camera camera;
+
+
+	private void Start()
+	{
+		camera = cameraRig.camera;
+		if (camera == null)
+		{
+			Debug.LogError("ERROR: no camera");
+		}
+	}
+
 
 	void Update()
 	{
@@ -25,32 +32,18 @@ public class TapToSetWorldOrigin : MonoBehaviour
 			arOrigin.Raycast(Input.GetTouch(0).position, hitResults);
 			if (hitResults.Count > 0)
 			{
-				ARRaycastHit firstHitResult = hitResults[0];
-				//FocusOn(firstHitResult.pose.position);
+				Pose hitPose = hitResults[0].pose;
+
+				Pose worldPose = new Pose();
+				worldPose.position = hitPose.position;
+
+				Vector3 facingDirection = camera.transform.forward;
+				facingDirection.y = 0;
+				facingDirection.Normalize();
+				worldPose.rotation = Quaternion.LookRotation(facingDirection, Vector3.up);
+
+				cameraRig.SetWorldOrigin(worldPose);
 			}         
 		}
-        
-		cameraOffset.transform.position = Vector3.Lerp(cameraOffset.transform.position, targetCameraPose.position, 0.05f);
-		cameraSpaceRotation.transform.rotation = Quaternion.Slerp(cameraSpaceRotation.transform.rotation, targetCameraPose.rotation, 0.05f);
-	}
-
-	public void FocusOn(Pose pose)
-	{
-		targetCameraPose = new Pose();
-		Pose localPose = cameraSpaceRotation.InverseTransformPose(pose);
-
-		var targetPosRelativeToCamera = arCamera.InverseTransformPoint(pose.position);
-		targetCameraPose.position = arCamera.position - targetPosRelativeToCamera;
-
-		float yaw = Vector3.SignedAngle(cameraSpaceRotation.forward, pose.forward, Vector3.up);
-		targetCameraPose.rotation = Quaternion.AngleAxis(-yaw, Vector3.up);
-
-        //Vector3 cameraDirection = Camera.main.transform.forward;
-        //Vector3 localCameraDirection = cameraSpace.InverseTransformVector(cameraDirection);
-        //float cameraYaw = Vector3.SignedAngle(cameraDirection, Vector3.forward, Vector3.up);
-        //Debug.Log("camera yaw: " + cameraYaw);
-
-        //Quaternion counterRotate = Quaternion.AngleAxis(cameraYaw, Vector3.up);
-        //cameraSpace.transform.rotation = counterRotate;
 	}
 }
