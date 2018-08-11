@@ -6,7 +6,7 @@ Material:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
-  m_Name: Net
+  m_Name: Net Long
   m_Shader: {fileID: 4800000, guid: 5ea597ceaffff4b9fa61ed74e9d55c29, type: 3}
   m_ShaderKeywords: _ALPHABLEND_ON _EMISSION
   m_LightmapFlags: 2
@@ -70,7 +70,7 @@ Material:
     - _GlossMapScale: 1
     - _Glossiness: 0.899
     - _GlossyReflections: 1
-    - _MaxOpacity: 0.126
+    - _MaxOpacity: 0.519
     - _Metallic: 0.469
     - _MinOpacity: 0
     - _Mode: 2
@@ -85,4 +85,4 @@ Material:
     m_Colors:
     - _Color: {r: 0, g: 0.8665142, b: 1, a: 0.21176471}
     - _EmissionColor: {r: 0, g: 2, b: 1.9000993, a: 1}
-    - _GridTiling: {r: 5, g: 5, b: 0, a: 0}
+    - _GridTiling: {r: 20, g: 10, b: 0, a: 0}

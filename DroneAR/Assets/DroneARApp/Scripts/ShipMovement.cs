@@ -30,7 +30,7 @@ public class ShipMovement : MonoBehaviour
 		float bankAngle = maxBankAngle * bankIntensity;
         
 		Quaternion bankPose = Quaternion.AngleAxis(bankAngle, transform.InverseTransformDirection(transform.forward));
-		transform.localRotation = bankPose;
+		shipBody.localRotation = bankPose;
         
 		float dampingFactor = Time.deltaTime / damping;
 		
